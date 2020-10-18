@@ -1,0 +1,11 @@
+.who {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media screen and (max-width: 882px) {
+  .who {
+    flex-direction: column;
+  }
+}

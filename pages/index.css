@@ -1,0 +1,46 @@
+@import url(../vendor/normalize.css);
+@import url(../vendor/fonts/inter.css);
+
+@import url(../blocks/page/page.css);
+@import url(../blocks/page/__box/page__box.css);
+@import url(../blocks/page/__head/page__head.css);
+@import url(../blocks/page/__main/page__main.css);
+@import url(../blocks/page/__posts/page__posts.css);
+@import url(../blocks/page/__foot/page__foot.css);
+
+@import url(../blocks/head/head.css);
+@import url(../blocks/head/__logo/head__logo.css);
+
+@import url(../blocks/main/main.css);
+
+@import url(../blocks/who/who.css);
+@import url(../blocks/who/__box/who__box.css);
+@import url(../blocks/who/__figure/who__figure.css);
+@import url(../blocks/who/__caption/who__caption.css);
+@import url(../blocks/who/__life-hacks/who__life-hacks.css);
+@import url(../blocks/who/__title/who__title.css);
+@import url(../blocks/who/__button-eddit/who__button-eddit.css);
+@import url(../blocks/who/__subtitle/who__subtitle.css);
+@import url(../blocks/who/__button-add/who__button-add.css);
+
+@import url(../blocks/posts/posts.css);
+@import url(../blocks/posts/__box/posts__box.css);
+
+@import url(../blocks/post/post.css);
+@import url(../blocks/post/__box/post__box.css);
+@import url(../blocks/post/__figure/post__figure.css);
+@import url(../blocks/post/__caption/post__caption.css);
+@import url(../blocks/post/__title/post__title.css);
+@import url(../blocks/post/__button-like/post__button-like.css);
+
+@import url(../blocks/foot/foot.css);
+@import url(../blocks/foot/__author/foot__author.css);
+
+@import url(../blocks/popup/popup.css);
+@import url(../blocks/popup/_active/popup_active.css);
+@import url(../blocks/popup/__box/popup__box.css);
+@import url(../blocks/popup/__button-close/popup__button-close.css);
+@import url(../blocks/popup/__form/popup__form.css);
+@import url(../blocks/popup/__title/popup__title.css);
+@import url(../blocks/popup/__input/popup__input.css);
+@import url(../blocks/popup/__button-save/popup__button-save.css);

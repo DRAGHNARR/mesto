@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesto</title>
+    <link href="./pages/index.css" rel="stylesheet">
+  </head>
+
+
+  <body class="page">
+    <div class="page__box">
+      <header class="head page__head">
+        <img src="images/head/__logo/head__logo.svg" alt="Место" class="head__logo">
+      </header>
+      <main class="main page__main">
+        <section class="who">
+          <figure class="who__box">
+            <img src="images/who/__figure/who__figure.jpg" alt="Аватар" class="who__figure">
+            <figcaption class="who__caption">
+              <div class="who__life-hacks">
+                <h1 class="who__title">Жак-Ив Кусто</h1>
+                <button class="who__button-eddit" type="button"></button>
+              </div>
+              <p class="who__subtitle">Исследователь океана</p>
+            </figcaption>
+          </figure>
+          <button class="who__button-add" type="button"></button>
+        </section>
+
+
+        <section class="posts page__posts">
+          <ul class="posts__box">
+            <li class="post">
+              <figure class="post__box">
+                <img src="images/post/__figure/post__figure1.jpg" alt="Изображение карточки" class="post__figure">
+                <figcaption class="post__caption">
+                  <h2 class="post__title">Карачаевск</h2>
+                  <button class="post__button-like" type="button"></button>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="post">
+              <figure class="post__box">
+                <img src="images/post/__figure/post__figure2.jpg" alt="Изображение карточки" class="post__figure">
+                <figcaption class="post__caption">
+                  <h2 class="post__title">Гора Эльбрус</h2>
+                  <button class="post__button-like" type="button"></button>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="post">
+              <figure class="post__box">
+                <img src="images/post/__figure/post__figure3.jpg" alt="Изображение карточки" class="post__figure">
+                <figcaption class="post__caption">
+                  <h2 class="post__title">Домбай</h2>
+                  <button class="post__button-like" type="button"></button>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="post">
+              <figure class="post__box">
+                <img src="images/post/__figure/post__figure2.jpg" alt="Изображение карточки" class="post__figure">
+                <figcaption class="post__caption">
+                  <h2 class="post__title">Гора Эльбрус</h2>
+                  <button class="post__button-like" type="button"></button>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="post">
+              <figure class="post__box">
+                <img src="images/post/__figure/post__figure3.jpg" alt="Изображение карточки" class="post__figure">
+                <figcaption class="post__caption">
+                  <h2 class="post__title">Домбай</h2>
+                  <button class="post__button-like" type="button"></button>
+                </figcaption>
+              </figure>
+            </li>
+            <li class="post">
+              <figure class="post__box">
+                <img src="images/post/__figure/post__figure1.jpg" alt="Изображение карточки" class="post__figure">
+                <figcaption class="post__caption">
+                  <h2 class="post__title">Карачаево-Черкесия</h2>
+                  <button class="post__button-like" type="button"></button>
+                </figcaption>
+              </figure>
+            </li>
+          </ul>
+        </section>
+      </main>
+
+
+      <footer class="foot page__foot">
+        <h2 class="foot__author">&copy; 2020 Mesto Russia</h2>
+      </footer>
+    </div>
+
+
+    <section class="popup">
+      <div class="popup__box">
+        <button class="popup__button-close" type="button"></button>
+        <form class="popup__form" method="get" action="index.js" name="popup">
+          <h2 class="popup__title">Редактировать профиль</h2>
+          <input class="popup__input popup__input_type_title" type="text" name="title">
+          <input class="popup__input popup__input_type_subtitle" type="text" name="subtitle">
+          <button class="popup__button-save" type="button">Сохранить</button>
+        </form>
+      </div>
+    </section>
+
+    <script src="scripts/index.js"></script>
+  </body>
+</html>

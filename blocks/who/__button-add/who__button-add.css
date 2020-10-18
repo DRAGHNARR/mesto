@@ -1,0 +1,26 @@
+.who__button-add {
+  padding: 0;
+  background-image: url(../../../images/who/__button-add/who__button-add.svg);
+  background-size: 22px 22px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #000;
+  width: 150px;
+  height: 50px;
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  border-radius: 2px;
+}
+
+.who__button-add:hover {
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background-image: url(../../../images/who/__button-add/who__button-add_grey.svg);
+  cursor: pointer;
+}
+
+@media screen and (max-width: 882px) {
+  .who__button-add {
+    width: 282px;
+    margin: 36px 0 0 0;
+  }
+}
