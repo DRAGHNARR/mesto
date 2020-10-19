@@ -1,13 +1,20 @@
-let popup = document.querySelector(".popup");
-let buttonEdit = document.querySelector(".who__button-eddit");
-let buttonClose = document.querySelector(".popup__button-close");
-let buttonSave = document.querySelector(".popup__button-save");
+const popup = document.querySelector(".popup");
+
+const buttonEdit = document.querySelector(".who__button-eddit");
+const buttonClose = document.querySelector(".popup__button-close");
+const popupForm = document.querySelector(".popup__form");
+
+const popupTitle = document.querySelector(".popup__input_type_title");
+const popupSubitle = document.querySelector(".popup__input_type_subtitle");
+
+const whoTitle = document.querySelector(".who__title");
+const whoSubtitle = document.querySelector(".who__subtitle");
 
 function popupOpen(event) {
   // console.log(popup);
 
-  document.querySelector(".popup__input_type_title").value = document.querySelector(".who__title").textContent;
-  document.querySelector(".popup__input_type_subtitle").value = document.querySelector(".who__subtitle").textContent;
+  popupTitle.value = whoTitle.textContent;
+  popupSubitle.value = whoSubtitle.textContent;
   
   popup.classList.add("popup_active");
 }
@@ -19,8 +26,8 @@ function popupClose(event) {
 
 function popupSave(event) {
   event.preventDefault();
-  document.querySelector(".who__title").textContent = document.querySelector(".popup__input_type_title").value;
-  document.querySelector(".who__subtitle").textContent = document.querySelector(".popup__input_type_subtitle").value;
+  whoTitle.textContent = popupTitle.value;
+  whoSubtitle.textContent = popupSubitle.value;
   
   popupClose()
 }
@@ -29,4 +36,4 @@ function popupSave(event) {
 
 buttonEdit.addEventListener("click", popupOpen);
 buttonClose.addEventListener("click", popupClose);
-buttonSave.addEventListener("click", popupSave);
+popupForm.addEventListener("submit", popupSave);
