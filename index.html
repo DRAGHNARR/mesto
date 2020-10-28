@@ -31,60 +31,6 @@
 
         <section class="posts page__posts">
           <ul class="posts__box">
-            <li class="post">
-              <figure class="post__box">
-                <img src="images/post/__figure/post__figure1.jpg" alt="Изображение карточки" class="post__figure">
-                <figcaption class="post__caption">
-                  <h2 class="post__title">Карачаевск</h2>
-                  <button class="post__button-like" type="button"></button>
-                </figcaption>
-              </figure>
-            </li>
-            <li class="post">
-              <figure class="post__box">
-                <img src="images/post/__figure/post__figure2.jpg" alt="Изображение карточки" class="post__figure">
-                <figcaption class="post__caption">
-                  <h2 class="post__title">Гора Эльбрус</h2>
-                  <button class="post__button-like" type="button"></button>
-                </figcaption>
-              </figure>
-            </li>
-            <li class="post">
-              <figure class="post__box">
-                <img src="images/post/__figure/post__figure3.jpg" alt="Изображение карточки" class="post__figure">
-                <figcaption class="post__caption">
-                  <h2 class="post__title">Домбай</h2>
-                  <button class="post__button-like" type="button"></button>
-                </figcaption>
-              </figure>
-            </li>
-            <li class="post">
-              <figure class="post__box">
-                <img src="images/post/__figure/post__figure2.jpg" alt="Изображение карточки" class="post__figure">
-                <figcaption class="post__caption">
-                  <h2 class="post__title">Гора Эльбрус</h2>
-                  <button class="post__button-like" type="button"></button>
-                </figcaption>
-              </figure>
-            </li>
-            <li class="post">
-              <figure class="post__box">
-                <img src="images/post/__figure/post__figure3.jpg" alt="Изображение карточки" class="post__figure">
-                <figcaption class="post__caption">
-                  <h2 class="post__title">Домбай</h2>
-                  <button class="post__button-like" type="button"></button>
-                </figcaption>
-              </figure>
-            </li>
-            <li class="post">
-              <figure class="post__box">
-                <img src="images/post/__figure/post__figure1.jpg" alt="Изображение карточки" class="post__figure">
-                <figcaption class="post__caption">
-                  <h2 class="post__title">Карачаево-Черкесия</h2>
-                  <button class="post__button-like" type="button"></button>
-                </figcaption>
-              </figure>
-            </li>
           </ul>
         </section>
       </main>
@@ -96,10 +42,10 @@
     </div>
 
 
-    <section class="popup">
+    <section class="popup" id="who-popup">
       <div class="popup__box">
         <button class="popup__button-close" type="button"></button>
-        <form class="popup__form" method="get" action="index.js" name="popup">
+        <form class="popup__form" method="get" action="who.js" name="popup">
           <h2 class="popup__title">Редактировать профиль</h2>
           <input class="popup__input popup__input_type_title" type="text" name="title">
           <input class="popup__input popup__input_type_subtitle" type="text" name="subtitle">
@@ -108,6 +54,46 @@
       </div>
     </section>
 
+    <section class="popup" id="post-popup">
+      <div class="popup__box">
+        <button class="popup__button-close" type="button"></button>
+        <form class="popup__form" method="get" action="index.js" name="popup">
+          <h2 class="popup__title">Новое место</h2>
+          <input class="popup__input popup__input_type_post-title" type="text" name="title">
+          <input class="popup__input popup__input_type_post-image" type="text" name="image">
+          <button class="popup__button-save" type="submit">Сохранить</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="popup" id="image-popup">
+      <div class="popup__image-box">
+        <button class="popup__button-close" type="button"></button>
+        <figure class="popup__caption">
+          <img src="" alt="Изображение карточки" class="popup__figure">
+          <figcaption class="popup__caption">
+            <h2 class="popup__caption-title"></h2>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <template id="post">
+      <li class="post">
+        <figure class="post__box">
+          <div class="post__frame">
+            <img src="" alt="Изображение карточки" class="post__figure">
+            <button class="post__button-remove" type="button"></button>
+          </div>
+          <figcaption class="post__caption">
+            <h2 class="post__title"></h2>
+            <button class="post__button-like" type="button"></button>
+          </figcaption>
+        </figure>
+      </li>
+    </template>
+
+    <script src="scripts/consts.js"></script>
     <script src="scripts/index.js"></script>
   </body>
 </html>

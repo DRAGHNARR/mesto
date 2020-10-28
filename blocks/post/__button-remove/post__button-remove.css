@@ -1,0 +1,16 @@
+.post__button-remove {
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  padding: 0;
+  background-image: url(../../../images/post/__button-remove/post__button-remove.svg);
+  background-color: transparent;
+  border: none;
+  width: 18px;
+  height: 19.3px;
+}
+
+.post__button-remove:hover {
+  background-image: url(../../../images/post/__button-remove/post__button-remove_grey.svg);
+  cursor: pointer;
+}
