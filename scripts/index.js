@@ -1,103 +1,16 @@
+/* post-inital begin */
 const postTemplate = getPostTemplate();
 const posts = document.querySelector(".posts__box");
+const imagePopup = document.querySelector("#image-popup");
+const imageButtonClose = imagePopup.querySelector(".popup__button-close");
 
-function getPostTemplate () {
-  const tempalte = document.querySelector("#post").content;
-  return tempalte;
-}
+loadInitialPosts(posts, imagePopup, initialCards);
 
-function addPostInitial(posts, name, url) {
-  const post = postTemplate.cloneNode(true);
-
-  post.querySelector(".post__title").textContent = name;
-  post.querySelector(".post__figure").src = url;
-
-  post.querySelector(".post__button-remove").addEventListener("click", event => {
-    event.target.parentNode.parentNode.parentNode.remove();
-  });
-
-  post.querySelector(".post__button-like").addEventListener("click", event => {
-    event.target.classList.toggle("post__button-like_active");
-  });
-
-  post.querySelector(".post__figure").addEventListener("click", event => {
-    imagePopup.classList.add("popup_active");
-    
-    imagePopup.querySelector(".popup__caption-title").textContent = event.target.parentNode.parentNode.querySelector(".post__title").textContent;
-    imagePopup.querySelector(".popup__figure").src = event.target.src;
-
-  });
-
-  posts.append(post);
-}
-
-const addPost = function (config) {
-  const post = postTemplate.cloneNode(true);
-
-  post.querySelector(".post__title").textContent = config.postPopupTitle.value;
-  post.querySelector(".post__figure").src = config.postPopupImage.value;
-
-  post.querySelector(".post__button-remove").addEventListener("click", event => {
-    event.target.parentNode.parentNode.parentNode.remove();
-  });
-
-  post.querySelector(".post__button-like").addEventListener("click", event => {
-    event.target.classList.toggle("post__button-like_active");
-  });
-
-  post.querySelector(".post__figure").addEventListener("click", event => {    
-    imagePopup.classList.add("popup_active");
-    
-    imagePopup.querySelector(".popup__caption-title").textContent = event.target.parentNode.parentNode.querySelector(".post__title").textContent;
-    imagePopup.querySelector(".popup__figure").src = event.target.src;
-  });
-
-  config.posts.append(post);
-}
-
-const edditWho = function (config) {
-  console.log(config);
-  config.whoTitle.textContent = config.whoPopupTitle.value;
-  config.whoSubtitle.textContent = config.whoPopupSubitle.value;
-}
-
-function popupClose(popup) {
-  popup.classList.remove("popup_active");
-}
-
-function popupOpen(popup, defaults) {
-  popup.classList.add("popup_active");
-
-  defaults.forEach(item => {
-    item[0].value = item[1].textContent ? item[1].textContent : item[1];
-  });
-}
-
-function addActionOpen(popup, popupButtonOpen, defaults) {
-  popupButtonOpen.addEventListener("click", event => {
-    popupOpen(popup, defaults);
-  });
-}
-
-function addActionClose(popup, popupButtonClose) {
-  popupButtonClose.addEventListener("click", event => {
-    popupClose(popup);
-  });
-}
-
-function addActionSubmit(popup, popupForm, action, config) {
-  popupForm.addEventListener("submit", event => {
-    event.preventDefault();
-
-    action(config);
-    popupClose(popup);
-  });
-}
-
-initialCards.forEach(card => {
-  addPostInitial(posts, card.name, card.link);
+imageButtonClose.addEventListener("click", event => {
+  closePopup(imagePopup);
 });
-
+/* post-initial end */
+/* post-creation begin */
 const postPopup = document.querySelector("#post-popup");
 const postPopupForm = postPopup.querySelector(".popup__form");
 const postButtonAdd = document.querySelector(".who__button-add");
@@ -106,10 +19,22 @@ const postButtonClose = postPopup.querySelector(".popup__button-close");
 const postPopupTitle = postPopup.querySelector(".popup__input_type_post-title");
 const postPopupImage = postPopup.querySelector(".popup__input_type_post-image");
 
-addActionOpen(postPopup, postButtonAdd, [[postPopupTitle, ""], [postPopupImage, ""]]);
-addActionClose(postPopup, postButtonClose);
-addActionSubmit(postPopup, postPopupForm, addPost, {posts: posts, postPopupTitle: postPopupTitle, postPopupImage: postPopupImage});
+postButtonAdd.addEventListener("click", event => {
+  openPopup(postPopup);
+});
 
+postButtonClose.addEventListener("click", event => {
+  closePopup(postPopup);
+});
+
+postPopupForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  addPost(posts, createPost(imagePopup, postPopupTitle, postPopupImage)); 
+  closePopup(postPopup);
+});
+/* post-creation end */
+/* who-eddit begin */
 const whoPopup = document.querySelector("#who-popup");
 const whoPopupForm = whoPopup.querySelector(".popup__form");
 const whoButtonEdit = document.querySelector(".who__button-eddit");
@@ -121,14 +46,77 @@ const whoPopupSubitle = whoPopup.querySelector(".popup__input_type_subtitle");
 const whoTitle = document.querySelector(".who__title");
 const whoSubtitle = document.querySelector(".who__subtitle");
 
-addActionOpen(whoPopup, whoButtonEdit, [[whoPopupTitle, whoTitle], [whoPopupSubitle, whoSubtitle]]);
-addActionClose(whoPopup, whoButtonClose);
-addActionSubmit(whoPopup, whoPopupForm, edditWho, {whoTitle: whoTitle, whoSubtitle: whoSubtitle, whoPopupTitle: whoPopupTitle, whoPopupSubitle: whoPopupSubitle});
+whoButtonEdit.addEventListener("click", event => {
+  openPopup(whoPopup);
 
-const imagePopup = document.querySelector("#image-popup");
-const imageButtonClose = imagePopup.querySelector(".popup__button-close");
+  whoPopupTitle.value = whoTitle.textContent;
+  whoPopupSubitle.value = whoSubtitle.textContent;
+});
 
-const imagePopupFigure = imagePopup.querySelector(".popup__figure");
-const imagePopupTitle = imagePopup.querySelector(".popup__caption-title");
+whoButtonClose.addEventListener("click", event => {
+  closePopup(whoPopup);
+});
 
-addActionClose(imagePopup, imageButtonClose);
+whoPopupForm.addEventListener("submit", event => {
+  event.preventDefault();
+
+  whoTitle.textContent = whoPopupTitle.value;
+  whoSubtitle.textContent = whoPopupSubitle.value;
+  closePopup(whoPopup);
+});
+/* who-eddit end */
+
+function openPopup(popup) {
+  popup.classList.add("popup_active");
+}
+
+function closePopup(popup) {
+  popup.classList.remove("popup_active");
+}
+
+function getPostTemplate() {
+  const tempalte = document.querySelector("#post").content;
+  return tempalte;
+}
+
+function removePost(post) {
+  post.remove();
+}
+
+function likePost(buttonLike) {
+  buttonLike.classList.toggle("post__button-like_active");
+}
+
+function createPost(imagePopup, name, url) {
+  const post = postTemplate.cloneNode(true);
+
+  post.querySelector(".post__title").textContent = name.value ? name.value : name;
+  post.querySelector(".post__figure").src = url.value ? url.value : url;
+
+  post.querySelector(".post__button-remove").addEventListener("click", event => {
+    removePost(event.target.closest(".post"));
+  });
+
+  post.querySelector(".post__button-like").addEventListener("click", event => {
+    likePost(event.target);
+  });
+
+  post.querySelector(".post__figure").addEventListener("click", event => {
+    openPopup(imagePopup);
+    
+    imagePopup.querySelector(".popup__caption-title").textContent = event.target.closest(".post").querySelector(".post__title").textContent;
+    imagePopup.querySelector(".popup__figure").src = event.target.src;
+  });
+
+  return(post);
+}
+
+function addPost(posts, post) {
+  posts.prepend(post);
+}
+
+function loadInitialPosts(posts, imagePopup, initialCards) {
+  initialCards.forEach(card => {
+    addPost(posts, createPost(imagePopup, card.name, card.link))
+  });
+}
