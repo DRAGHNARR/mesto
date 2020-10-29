@@ -20,6 +20,9 @@ const postPopupTitle = postPopup.querySelector(".popup__input_type_post-title");
 const postPopupImage = postPopup.querySelector(".popup__input_type_post-image");
 
 postButtonAdd.addEventListener("click", event => {
+  postPopupTitle.value = "";
+  postPopupImage.value = "";
+
   openPopup(postPopup);
 });
 
