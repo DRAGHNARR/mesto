@@ -37,7 +37,6 @@ function setEventListeners(inForm, {inputSelector, submitButtonSelector, ...args
 }
 
 function hideInputError(inForm, inInput, {errorClass, inputErrorClass, ...args}) {
-  console.log(errorClass);
   inInput.classList.remove(inputErrorClass);
   error = inForm.querySelector(`#${inInput.id}-error`);
   error.classList.remove(errorClass);
@@ -45,7 +44,6 @@ function hideInputError(inForm, inInput, {errorClass, inputErrorClass, ...args})
 }
 
 function showInputError(inForm, inInput, inMessage, {errorClass, inputErrorClass, ...args}) {
-  console.log(errorClass);
   inInput.classList.add(inputErrorClass);
   error = inForm.querySelector(`#${inInput.id}-error`);
   error.classList.add(errorClass);
