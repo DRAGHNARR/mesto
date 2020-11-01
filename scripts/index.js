@@ -54,6 +54,14 @@ whoButtonEdit.addEventListener("click", event => {
   whoPopupTitle.value = whoTitle.textContent;
   whoPopupSubitle.value = whoSubtitle.textContent;
   openPopup(whoPopup);
+  toggleButtonState([whoPopupTitle, whoPopupSubitle], whoButtonSave, {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button-save',
+    inactiveButtonClass: 'popup__button-save_inactive',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+  });
 });
 
 whoButtonClose.addEventListener("click", event => {
@@ -71,14 +79,6 @@ whoPopupForm.addEventListener("submit", event => {
 
 function openPopup(popup) {
   popup.classList.add("popup_active");
-  toggleButtonState(Array.from(popup.querySelectorAll(".popup__input")), popup.querySelector(".popup__button-save"), {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button-save',
-    inactiveButtonClass: 'popup__button-save_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-  });
 }
 
 function closePopup(popup) {
