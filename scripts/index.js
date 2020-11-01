@@ -16,8 +16,8 @@ const postPopupForm = postPopup.querySelector(".popup__form");
 const postButtonAdd = document.querySelector(".who__button-add");
 const postButtonClose = postPopup.querySelector(".popup__button-close");
 
-const postPopupTitle = postPopup.querySelector(".popup__input_type_post-title");
-const postPopupImage = postPopup.querySelector(".popup__input_type_post-image");
+const postPopupTitle = postPopup.querySelector("#post-title");
+const postPopupImage = postPopup.querySelector("#post-image");
 
 postButtonAdd.addEventListener("click", event => {
   postPopupTitle.value = "";
@@ -42,18 +42,18 @@ const whoPopup = document.querySelector("#who-popup");
 const whoPopupForm = whoPopup.querySelector(".popup__form");
 const whoButtonEdit = document.querySelector(".who__button-eddit");
 const whoButtonClose = whoPopup.querySelector(".popup__button-close");
+const whoButtonSave = whoPopup.querySelector(".popup__button-save");
 
-const whoPopupTitle = whoPopup.querySelector(".popup__input_type_title");
-const whoPopupSubitle = whoPopup.querySelector(".popup__input_type_subtitle");
+const whoPopupTitle = whoPopup.querySelector("#who-title");
+const whoPopupSubitle = whoPopup.querySelector("#who-subtitle");
 
 const whoTitle = document.querySelector(".who__title");
 const whoSubtitle = document.querySelector(".who__subtitle");
 
 whoButtonEdit.addEventListener("click", event => {
-  openPopup(whoPopup);
-
   whoPopupTitle.value = whoTitle.textContent;
   whoPopupSubitle.value = whoSubtitle.textContent;
+  openPopup(whoPopup);
 });
 
 whoButtonClose.addEventListener("click", event => {
@@ -71,6 +71,14 @@ whoPopupForm.addEventListener("submit", event => {
 
 function openPopup(popup) {
   popup.classList.add("popup_active");
+  toggleButtonState(Array.from(popup.querySelectorAll(".popup__input")), popup.querySelector(".popup__button-save"), {
+    formSelector: '.popup__form',
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button-save',
+    inactiveButtonClass: 'popup__button-save_inactive',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+  });
 }
 
 function closePopup(popup) {
@@ -123,3 +131,18 @@ function loadInitialPosts(posts, imagePopup, initialCards) {
     addPost(posts, createPost(imagePopup, card.name, card.link))
   });
 }
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    const popup = document.querySelector(".popup_active");
+    if (popup) {
+      closePopup(popup);
+    }
+  }
+});
+
+document.addEventListener("click", event => {
+  if (event.target.classList.contains("popup")) {
+    closePopup(event.target);
+  }
+});

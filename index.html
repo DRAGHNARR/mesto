@@ -45,10 +45,12 @@
     <section class="popup" id="who-popup">
       <div class="popup__box">
         <button class="popup__button-close" type="button"></button>
-        <form class="popup__form" method="get" action="who.js" name="who-form">
+        <form class="popup__form" method="get" action="index.js" name="who-form">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <input class="popup__input popup__input_type_title" type="text" name="who-title" placeholder="Ваше имя">
-          <input class="popup__input popup__input_type_subtitle" type="text" name="who-subtitle" placeholder="Ваше призвание">
+          <input id="who-title" class="popup__input" type="text" name="who-title" minlength="2" maxlength="40" required placeholder="Ваше имя">
+          <span id="who-title-error" class="popup__input-error"></span>
+          <input id="who-subtitle" class="popup__input" type="text" name="who-subtitle" minlength="2" maxlength="200" required placeholder="Ваше призвание">
+          <span id="who-subtitle-error" class="popup__input-error"></span>
           <button class="popup__button-save" type="submit">Сохранить</button>
         </form>
       </div>
@@ -59,8 +61,10 @@
         <button class="popup__button-close" type="button"></button>
         <form class="popup__form" method="get" action="index.js" name="post-form">
           <h2 class="popup__title">Новое место</h2>
-          <input class="popup__input popup__input_type_post-title" type="text" name="post-title" placeholder="Название">
-          <input class="popup__input popup__input_type_post-image" type="text" name="post-image" placeholder="Ссылка на картинку">
+          <input id="post-title" class="popup__input" type="text" name="post-title"  minlength="2" maxlength="30" required placeholder="Название">
+          <span id="post-title-error" class="popup__input-error"></span>
+          <input id="post-image" class="popup__input" type="url" name="post-image" required placeholder="Ссылка на картинку">
+          <span id="post-image-error" class="popup__input-error"></span>
           <button class="popup__button-save" type="submit">Сохранить</button>
         </form>
       </div>
@@ -94,6 +98,7 @@
     </template>
 
     <script src="scripts/consts.js"></script>
+    <script src="scripts/validate.js"></script>
     <script src="scripts/index.js"></script>
   </body>
 </html>

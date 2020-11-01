@@ -1,8 +1,9 @@
 .popup__button-save {
-  margin: 48px 36px 36.51px;
+  margin: 31.34px 36px 36.51px;
   padding: 13.66px 0 18.49px;
   background: #000;
   border-radius: 2px;
+  border: 1px solid #000;
   font-size: 18px;
   line-height: 1.22;
   text-align: center;
