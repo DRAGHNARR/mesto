@@ -59,8 +59,10 @@ function isFormInvalid(inInputList) {
 function toggleButtonState(inInputList, inButton, {inactiveButtonClass, ...args}) {
   if (isFormInvalid(inInputList)) {
     inButton.classList.add(inactiveButtonClass);
+    inButton.disabled = true;
   }
   else {
     inButton.classList.remove(inactiveButtonClass);
+    inButton.disabled = false;
   }
 }

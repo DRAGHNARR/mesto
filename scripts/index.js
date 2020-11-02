@@ -79,6 +79,16 @@ whoPopupForm.addEventListener("submit", event => {
 
 function openPopup(popup) {
   popup.classList.add("popup_active");
+
+  document.addEventListener("keydown", eventClosePopup);
+}
+
+function eventClosePopup(event) {
+  if (event.key === "Escape") {
+    const popup = document.querySelector(".popup_active");
+    closePopup(popup);
+    document.removeEventListener("keydown", eventClosePopup);
+  }
 }
 
 function closePopup(popup) {
@@ -131,15 +141,6 @@ function loadInitialPosts(posts, imagePopup, initialCards) {
     addPost(posts, createPost(imagePopup, card.name, card.link))
   });
 }
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    const popup = document.querySelector(".popup_active");
-    if (popup) {
-      closePopup(popup);
-    }
-  }
-});
 
 document.addEventListener("click", event => {
   if (event.target.classList.contains("popup")) {
