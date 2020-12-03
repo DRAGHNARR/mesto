@@ -1,3 +1,4 @@
+import { initialCards, validationConfig } from './consts.js'
 import { Card } from './card.js'
 import { FormValidator } from './form-validator.js'
 
@@ -105,14 +106,7 @@ whoButtonEdit.addEventListener("click", event => {
   whoPopupTitle.value = whoTitle.textContent;
   whoPopupSubitle.value = whoSubtitle.textContent;
   openPopup(whoPopup);
-  toggleButtonState([whoPopupTitle, whoPopupSubitle], whoButtonSave, {
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button-save',
-    inactiveButtonClass: 'popup__button-save_inactive',
-    inputErrorClass: 'popup__input_type_error',
-    errorClass: 'popup__input-error_active'
-  });
+  toggleButtonState([whoPopupTitle, whoPopupSubitle], whoButtonSave, validationConfig);
 });
 
 whoButtonClose.addEventListener("click", event => {
@@ -137,11 +131,4 @@ function setValidation(config) {
   });
 }
 
-setValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button-save',
-  inactiveButtonClass: 'popup__button-save_inactive',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active'
-});
+setValidation(validationConfig);
