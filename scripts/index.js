@@ -2,31 +2,20 @@ import { initialCards, validationConfig } from './consts.js'
 import { Card } from './card.js'
 import { FormValidator } from './form-validator.js'
 
+document.addEventListener("click", event => {
+  if (event.target.classList.contains("popup")) {
+    closePopup(event.target);
+  }
+});
+
 const posts = document.querySelector(".posts__box");
 const imagePopup = document.querySelector("#image-popup");
 const imageButtonClose = imagePopup.querySelector(".popup__button-close");
 const postSelector = "#post";
 
-function isFormInvalid(inInputList) {
-  return(inInputList.some(inputItem => {
-    return(!inputItem.validity.valid);
-  }));
-}
-
-function toggleButtonState(inInputList, inButton, {inactiveButtonClass, ...args}) {
-  if (isFormInvalid(inInputList)) {
-    inButton.classList.add(inactiveButtonClass);
-    inButton.disabled = true;
-  }
-  else {
-    inButton.classList.remove(inactiveButtonClass);
-    inButton.disabled = false;
-  }
-}
-
 function loadInitialPosts(posts, initialCards) {
   initialCards.forEach(data => {
-    const card = new Card(data.name, data.link, postSelector);
+    const card = new Card(data.name, data.link, postSelector, openPopup);
     const post = card.generate()
   
     addPost(posts, post);
@@ -84,7 +73,7 @@ postButtonClose.addEventListener("click", event => {
 postPopupForm.addEventListener("submit", event => {
   event.preventDefault();
 
-  const card = new Card(postPopupTitle, postPopupImage, postSelector);
+  const card = new Card(postPopupTitle, postPopupImage, postSelector, openPopup);
   addPost(posts, card.generate()); 
   closePopup(postPopup);
 });
@@ -106,7 +95,8 @@ whoButtonEdit.addEventListener("click", event => {
   whoPopupTitle.value = whoTitle.textContent;
   whoPopupSubitle.value = whoSubtitle.textContent;
   openPopup(whoPopup);
-  toggleButtonState([whoPopupTitle, whoPopupSubitle], whoButtonSave, validationConfig);
+  const validation = new FormValidator(validationConfig, document.forms.who_form);
+  validation.toggleButtonState([whoPopupTitle, whoPopupSubitle], whoButtonSave);
 });
 
 whoButtonClose.addEventListener("click", event => {

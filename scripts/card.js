@@ -4,10 +4,12 @@ export class Card {
 
   //static _template = document.querySelector("#post").content;
 
-  constructor(name, url, selector) {
+  constructor(name, url, selector, clickHandler) {
     this._name = name;
     this._url = url;
     this._selector = selector;
+    this._clickHandler = clickHandler;
+    this._popup = document.querySelector("#image-popup"); 
   }
 
   _getTemplate() {
@@ -34,26 +36,19 @@ export class Card {
     });
 
     this._element.querySelector(".post__figure").addEventListener("click", event => {
-      const popup = document.querySelector("#image-popup");
-      popup.classList.add("popup_active");
-      document.addEventListener("keydown", eventClosePopup);
-      
-      popup.querySelector(".popup__caption-title").textContent = event.target.closest(".post").querySelector(".post__title").textContent;
-      popup.querySelector(".popup__figure").src = event.target.src;
+      this._popup.querySelector(".popup__caption-title").textContent = event.target.closest(".post").querySelector(".post__title").textContent; 
+      this._popup.querySelector(".popup__figure").src = event.target.src;
+      this._clickHandler(this._popup);
     });
-  }
-
-  _openPopup() {
-    const popup = document.querySelector("#image-popup");
-    popup.classList.add("popup_active");
-    document.addEventListener("keydown", eventClosePopup);
   }
 
   generate() {
     this._element = this._getTemplate();
 
     this._element.querySelector(".post__title").textContent = this._name.value ? this._name.value : this._name;
-    this._element.querySelector(".post__figure").src = this._url.value ? this._url.value : this._url;
+    const elementImage = this._element.querySelector(".post__figure");
+    elementImage.src = this._url.value ? this._url.value : this._url;
+    elementImage.alt = this._name.value ? this._name.value : this._name;
 
     this._setEventListeners();
 
