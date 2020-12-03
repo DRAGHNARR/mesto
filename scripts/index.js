@@ -4,6 +4,7 @@ import { FormValidator } from './form-validator.js'
 const posts = document.querySelector(".posts__box");
 const imagePopup = document.querySelector("#image-popup");
 const imageButtonClose = imagePopup.querySelector(".popup__button-close");
+const postSelector = "#post";
 
 function isFormInvalid(inInputList) {
   return(inInputList.some(inputItem => {
@@ -24,7 +25,7 @@ function toggleButtonState(inInputList, inButton, {inactiveButtonClass, ...args}
 
 function loadInitialPosts(posts, initialCards) {
   initialCards.forEach(data => {
-    const card = new Card(data.name, data.link);
+    const card = new Card(data.name, data.link, postSelector);
     const post = card.generate()
   
     addPost(posts, post);
@@ -82,7 +83,7 @@ postButtonClose.addEventListener("click", event => {
 postPopupForm.addEventListener("submit", event => {
   event.preventDefault();
 
-  const card = new Card(postPopupTitle, postPopupImage);
+  const card = new Card(postPopupTitle, postPopupImage, postSelector);
   addPost(posts, card.generate()); 
   closePopup(postPopup);
 });

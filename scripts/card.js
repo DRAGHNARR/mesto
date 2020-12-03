@@ -4,15 +4,16 @@ export class Card {
 
   //static _template = document.querySelector("#post").content;
 
-  constructor(name, url) {
+  constructor(name, url, selector) {
     this._name = name;
     this._url = url;
+    this._selector = selector;
   }
 
   _getTemplate() {
     //console.log(this._template);
     //return this._template.cloneNode(true);
-    return document.querySelector("#post").content.cloneNode(true);
+    return document.querySelector(this._selector).content.cloneNode(true);
   }
 
   _like(button) {
