@@ -1,15 +1,64 @@
-/* post-inital begin */
-const postTemplate = getPostTemplate();
+import { Card } from './card.js'
+import { FormValidator } from './form-validator.js'
+
 const posts = document.querySelector(".posts__box");
 const imagePopup = document.querySelector("#image-popup");
 const imageButtonClose = imagePopup.querySelector(".popup__button-close");
 
-loadInitialPosts(posts, imagePopup, initialCards);
+function isFormInvalid(inInputList) {
+  return(inInputList.some(inputItem => {
+    return(!inputItem.validity.valid);
+  }));
+}
+
+function toggleButtonState(inInputList, inButton, {inactiveButtonClass, ...args}) {
+  if (isFormInvalid(inInputList)) {
+    inButton.classList.add(inactiveButtonClass);
+    inButton.disabled = true;
+  }
+  else {
+    inButton.classList.remove(inactiveButtonClass);
+    inButton.disabled = false;
+  }
+}
+
+function loadInitialPosts(posts, initialCards) {
+  initialCards.forEach(data => {
+    const card = new Card(data.name, data.link);
+    const post = card.generate()
+  
+    addPost(posts, post);
+  });
+}
+
+function addPost(posts, post) {
+  posts.prepend(post);
+}
+
+export function eventClosePopup(event) {
+  if (event.key === "Escape") {
+    const popup = document.querySelector(".popup_active");
+    closePopup(popup);
+  }
+}
+
+function openPopup(popup) {
+  popup.classList.add("popup_active");
+
+  document.addEventListener("keydown", eventClosePopup);
+}
+
+export function closePopup(popup) {
+  popup.classList.remove("popup_active");
+  document.removeEventListener("keydown", eventClosePopup);
+}
 
 imageButtonClose.addEventListener("click", event => {
   closePopup(imagePopup);
 });
-/* post-initial end */
+
+loadInitialPosts(posts, initialCards);
+
 /* post-creation begin */
 const postPopup = document.querySelector("#post-popup");
 const postPopupForm = postPopup.querySelector(".popup__form");
@@ -33,7 +82,8 @@ postButtonClose.addEventListener("click", event => {
 postPopupForm.addEventListener("submit", event => {
   event.preventDefault();
 
-  addPost(posts, createPost(imagePopup, postPopupTitle, postPopupImage)); 
+  const card = new Card(postPopupTitle, postPopupImage);
+  addPost(posts, card.generate()); 
   closePopup(postPopup);
 });
 /* post-creation end */
@@ -77,73 +127,20 @@ whoPopupForm.addEventListener("submit", event => {
 });
 /* who-eddit end */
 
-function openPopup(popup) {
-  popup.classList.add("popup_active");
+function setValidation(config) {
+  const formList = Array.from(document.forms);
 
-  document.addEventListener("keydown", eventClosePopup);
-}
-
-function eventClosePopup(event) {
-  if (event.key === "Escape") {
-    const popup = document.querySelector(".popup_active");
-    closePopup(popup);
-    document.removeEventListener("keydown", eventClosePopup);
-  }
-}
-
-function closePopup(popup) {
-  popup.classList.remove("popup_active");
-}
-
-function getPostTemplate() {
-  const tempalte = document.querySelector("#post").content;
-  return tempalte;
-}
-
-function removePost(post) {
-  post.remove();
-}
-
-function likePost(buttonLike) {
-  buttonLike.classList.toggle("post__button-like_active");
-}
-
-function createPost(imagePopup, name, url) {
-  const post = postTemplate.cloneNode(true);
-
-  post.querySelector(".post__title").textContent = name.value ? name.value : name;
-  post.querySelector(".post__figure").src = url.value ? url.value : url;
-
-  post.querySelector(".post__button-remove").addEventListener("click", event => {
-    removePost(event.target.closest(".post"));
-  });
-
-  post.querySelector(".post__button-like").addEventListener("click", event => {
-    likePost(event.target);
-  });
-
-  post.querySelector(".post__figure").addEventListener("click", event => {
-    openPopup(imagePopup);
-    
-    imagePopup.querySelector(".popup__caption-title").textContent = event.target.closest(".post").querySelector(".post__title").textContent;
-    imagePopup.querySelector(".popup__figure").src = event.target.src;
-  });
-
-  return(post);
-}
-
-function addPost(posts, post) {
-  posts.prepend(post);
-}
-
-function loadInitialPosts(posts, imagePopup, initialCards) {
-  initialCards.forEach(card => {
-    addPost(posts, createPost(imagePopup, card.name, card.link))
+  formList.forEach(formItem => {
+    const validation = new FormValidator(config, formItem);
+    validation.enableValidation();
   });
 }
 
-document.addEventListener("click", event => {
-  if (event.target.classList.contains("popup")) {
-    closePopup(event.target);
-  }
+setValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
 });
