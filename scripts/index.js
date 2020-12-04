@@ -73,17 +73,19 @@ postButtonClose.addEventListener("click", event => {
 postPopupForm.addEventListener("submit", event => {
   event.preventDefault();
 
-  const card = new Card(postPopupTitle, postPopupImage, postSelector, openPopup);
+  const card = new Card(postPopupTitle.value, postPopupImage.value, postSelector, openPopup);
   addPost(posts, card.generate()); 
   closePopup(postPopup);
 });
+
+const postFormValidator = new FormValidator(validationConfig, document.forms.post_form);
+postFormValidator.enableValidation();
 /* post-creation end */
 /* who-eddit begin */
 const whoPopup = document.querySelector("#who-popup");
 const whoPopupForm = whoPopup.querySelector(".popup__form");
 const whoButtonEdit = document.querySelector(".who__button-eddit");
 const whoButtonClose = whoPopup.querySelector(".popup__button-close");
-const whoButtonSave = whoPopup.querySelector(".popup__button-save");
 
 const whoPopupTitle = whoPopup.querySelector("#who-title");
 const whoPopupSubitle = whoPopup.querySelector("#who-subtitle");
@@ -91,12 +93,14 @@ const whoPopupSubitle = whoPopup.querySelector("#who-subtitle");
 const whoTitle = document.querySelector(".who__title");
 const whoSubtitle = document.querySelector(".who__subtitle");
 
+const whoFormValidator = new FormValidator(validationConfig, document.forms.who_form);
+whoFormValidator.enableValidation();
+
 whoButtonEdit.addEventListener("click", event => {
   whoPopupTitle.value = whoTitle.textContent;
   whoPopupSubitle.value = whoSubtitle.textContent;
   openPopup(whoPopup);
-  const validation = new FormValidator(validationConfig, document.forms.who_form);
-  validation.toggleButtonState([whoPopupTitle, whoPopupSubitle], whoButtonSave);
+  whoFormValidator.toggleButtonState();
 });
 
 whoButtonClose.addEventListener("click", event => {
@@ -111,14 +115,3 @@ whoPopupForm.addEventListener("submit", event => {
   closePopup(whoPopup);
 });
 /* who-eddit end */
-
-function setValidation(config) {
-  const formList = Array.from(document.forms);
-
-  formList.forEach(formItem => {
-    const validation = new FormValidator(config, formItem);
-    validation.enableValidation();
-  });
-}
-
-setValidation(validationConfig);

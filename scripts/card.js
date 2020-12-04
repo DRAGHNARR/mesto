@@ -1,5 +1,3 @@
-import { eventClosePopup, closePopup } from './index.js'
-
 export class Card {
 
   //static _template = document.querySelector("#post").content;

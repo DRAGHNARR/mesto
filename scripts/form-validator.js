@@ -6,16 +6,16 @@ export class FormValidator {
     this._buttonSave = inForm.querySelector(this._config.submitButtonSelector)
   }
 
-  _hideInputError(inForm, inInput) {
+  _hideInputError(inInput) {
     inInput.classList.remove(this._config.inputErrorClass);
-    const error = inForm.querySelector(`#${inInput.id}-error`);
+    const error = this._form.querySelector(`#${inInput.id}-error`);
     error.classList.remove(this._config.errorClass);
     error.textContent = "";
   }
   
-  _showInputError(inForm, inInput, inMessage) {
+  _showInputError(inInput, inMessage) {
     inInput.classList.add(this._config.inputErrorClass);
-    const error = inForm.querySelector(`#${inInput.id}-error`);
+    const error = this._form.querySelector(`#${inInput.id}-error`);
     error.classList.add(this._config.errorClass);
     error.textContent = inMessage;
   }
@@ -42,10 +42,10 @@ export class FormValidator {
   
     inForm.addEventListener("input", event => {
       if (event.target.validity.valid) {
-        this._hideInputError(inForm, event.target);
+        this._hideInputError(event.target);
       }
       else {
-        this._showInputError(inForm, event.target, event.target.validationMessage);
+        this._showInputError(event.target, event.target.validationMessage);
       }
       this.toggleButtonState();
     });
