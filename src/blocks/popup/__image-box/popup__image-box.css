@@ -1,0 +1,6 @@
+.popup__image-box {
+  max-width: calc(75vw + 81.4px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

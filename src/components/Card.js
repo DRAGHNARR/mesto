@@ -1,4 +1,4 @@
-export class Card {
+export default class Card {
 
   //static _template = document.querySelector("#post").content;
 
@@ -34,9 +34,7 @@ export class Card {
     });
 
     this._element.querySelector(".post__figure").addEventListener("click", event => {
-      this._popup.querySelector(".popup__caption-title").textContent = event.target.closest(".post").querySelector(".post__title").textContent; 
-      this._popup.querySelector(".popup__figure").src = event.target.src;
-      this._clickHandler(this._popup);
+      this._clickHandler(event.target.src, event.target.closest(".post").querySelector(".post__title").textContent);
     });
   }
 

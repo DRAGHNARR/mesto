@@ -1,0 +1,18 @@
+.who__title {
+  max-width: 350px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
+  font-weight: 500;
+  font-size: 42px;
+  line-height: 1.33;
+}
+
+@media screen and (max-width: 882px) {
+  .who__title {
+    font-size: 27px;
+    line-height: 2.07;
+    text-align: center;
+  }
+}
