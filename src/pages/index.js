@@ -61,8 +61,8 @@ const popupWithWho = new PopupWithForm(
   inputs => {
     const data = userInfo.getUserInfo();
     console.log(data);
-    inputs.who_title = data.title;
-    inputs.who_subtitle = data.subtitle;
+    inputs[0].value = data.title;
+    inputs[1].value = data.subtitle;
     console.log(inputs);
   },
   data => {
@@ -71,3 +71,9 @@ const popupWithWho = new PopupWithForm(
   whoFormValidator.toggleButtonState.bind(whoFormValidator)
 );
 popupWithWho.setEventListeners();
+
+const openEditFormButton = document.querySelector('.who__button-eddit');
+openEditFormButton.addEventListener('click', () => popupWithWho.open());
+
+const openAddFormButton = document.querySelector('.who__button-add');
+openAddFormButton.addEventListener('click', () => popupWithPost.open());

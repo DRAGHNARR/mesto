@@ -5,11 +5,13 @@ export default class UserInfo {
   }
 
   getUserInfo() {
-    return {title: this._titleElement.textContent, subtitle: this._subtitleElement.textContent};
+    return {
+      title: this._titleElement.textContent, 
+      subtitle: this._subtitleElement.textContent
+    };
   }
 
   setUserInfo(title, subtitle) {
-    console.log(title, subtitle);
     this._titleElement.textContent = title;
     this._subtitleElement.textContent = subtitle;
   }

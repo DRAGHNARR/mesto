@@ -34,17 +34,17 @@ export default class Card {
     });
 
     this._element.querySelector(".post__figure").addEventListener("click", event => {
-      this._clickHandler(event.target.src, event.target.closest(".post").querySelector(".post__title").textContent);
+      this._clickHandler(this._url, this._name);
     });
   }
 
   generate() {
     this._element = this._getTemplate();
 
-    this._element.querySelector(".post__title").textContent = this._name.value ? this._name.value : this._name;
+    this._element.querySelector(".post__title").textContent = this._name;
     const elementImage = this._element.querySelector(".post__figure");
-    elementImage.src = this._url.value ? this._url.value : this._url;
-    elementImage.alt = this._name.value ? this._name.value : this._name;
+    elementImage.src = this._url;
+    elementImage.alt = this._name;
 
     this._setEventListeners();
 

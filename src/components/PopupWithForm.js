@@ -29,13 +29,16 @@ export default class PopupWithForm extends Popup {
   open() {
     this._opener(this._inputs);
     this._checkValidity();
-    this._popupElement.classList.add("popup_active");
-    document.addEventListener("keydown", this._handleEscClose.bind(this));
+    super.open();
+  }
+
+  close() {
+    this._formElement.reset();
+    super.close(); 
   }
 
   setEventListeners() {
-    this._buttonCloseElement.addEventListener("click", this.close.bind(this));
-    this._openElement.addEventListener("click", this.open.bind(this));
+    super.setEventListeners();
     this._formElement.addEventListener("submit", this._submit.bind(this));
   }
 }
