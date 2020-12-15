@@ -14,7 +14,7 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
+      return Promise.reject(`Ошибка: ${res.status}`);
     });
   }
 
@@ -31,8 +31,9 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
-    });
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch(err => console.log(err));
   }
 
   setUserFigure(url) {
@@ -47,8 +48,9 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
-    });
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch(err => console.log(err));
   }
 
   getCards() {
@@ -57,8 +59,9 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
-    });
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch(err => console.log(err));
   }
 
   setCard(name, link) {
@@ -74,8 +77,9 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
-    });
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch(err => console.log(err));
   }
 
   deleteCard(id) {
@@ -87,8 +91,9 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
-    });
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch(err => console.log(err));
   }
 
   likeCard(id) {
@@ -100,8 +105,9 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
-    });
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch(err => console.log(err));
   }
 
   dislikeCard(id) {
@@ -113,7 +119,8 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-      return Promise.reject("bad day");
-    });
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch(err => console.log(err));
   }
 }
