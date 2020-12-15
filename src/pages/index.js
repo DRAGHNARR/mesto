@@ -33,7 +33,7 @@ const popupWithUser = new PopupWithForm(
     inputs[0].value = "";
   },
   data => {
-    api.setUserFigure(data.who_image)
+    return api.setUserFigure(data.who_image)
       .then(res => {
         console.log(res);
         userInfo.setUserFigure(res.avatar);
@@ -104,7 +104,7 @@ const popupWithPost = new PopupWithForm(
     });
   },
   data => {
-    api.setCard(data.post_title, data.post_image)
+    return api.setCard(data.post_title, data.post_image)
     .then(res => {
       const card = new Card(res._id, userInfo.id, res.name, res.link, res.likes, api.likeCard.bind(api), api.dislikeCard.bind(api), userInfo.id == res.owner._id, api.deleteCard.bind(api), "#post", popupWithImage.open.bind(popupWithImage));
       const cardElement = card.generate();
@@ -126,7 +126,7 @@ const popupWithWho = new PopupWithForm(
     inputs[1].value = data.subtitle;
   },
   data => {
-    api.setUserInfo(data.who_title, data.who_subtitle)
+    return api.setUserInfo(data.who_title, data.who_subtitle)
       .then(res => {
         userInfo.setUserInfo(res.name, res.about, res.avatar);
       });
