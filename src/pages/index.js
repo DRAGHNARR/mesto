@@ -7,6 +7,7 @@ import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
+import Api from "../components/Api.js";
 
 document.addEventListener("click", event => {
   if (event.target.classList.contains("popup")) {
@@ -14,7 +15,43 @@ document.addEventListener("click", event => {
   }
 });
 
-const userInfo = new UserInfo({titleSelector: ".who__title", subtitleSelector: ".who__subtitle"});
+const api = new Api({
+  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-18',
+  headers: {
+    authorization: '0b2a6fdf-1704-45fb-a35d-1d4f050e76e7',
+    'Content-Type': 'application/json'
+  }
+}); 
+
+const userFormValidator = new FormValidator(validationConfig, document.forms.who_eddit_form);
+userFormValidator.enableValidation();
+
+const popupWithUser = new PopupWithForm(
+  "#who-eddit-popup", 
+  ".who__figure",  
+  inputs => {
+    inputs[0].value = "";
+  },
+  data => {
+    api.setUserFigure(data.who_image)
+      .then(res => {
+        console.log(res);
+        userInfo.setUserFigure(res.avatar);
+      });
+  }, 
+  userFormValidator.toggleButtonState.bind(userFormValidator)
+);
+popupWithUser.setEventListeners();
+
+const userInfo = new UserInfo({titleSelector: ".who__title", subtitleSelector: ".who__subtitle", figureSelector: ".who__figure", overlaySelector: ".who__figure-eddit"}, popupWithUser.open.bind(popupWithUser));
+userInfo.setEventListeners();
+
+api.getUserInfo()
+  .then(res => {
+    userInfo.setUserInfo(res._id, res.name, res.about, res.avatar);
+  });
+
+//const userInfo = new UserInfo({titleSelector: ".who__title", subtitleSelector: ".who__subtitle"});
 
 const postFormValidator = new FormValidator(validationConfig, document.forms.post_form);
 postFormValidator.enableValidation();
@@ -25,7 +62,7 @@ whoFormValidator.enableValidation();
 const popupWithImage = new PopupWithImage("#image-popup");
 popupWithImage.setEventListeners();
 
-const cardList = new Section({
+/* const cardList = new Section({
     items: initialCards, 
     renderer: item => {
       const card = new Card(item.name, item.link, "#post", popupWithImage.open.bind(popupWithImage));
@@ -35,7 +72,28 @@ const cardList = new Section({
   }, 
   ".posts__box"
 );
-cardList.renderItems();
+cardList.renderItems(); */
+
+const cardList = new Section({
+  items: [], 
+  renderer: item => {
+      const card = new Card(item.name, item.link, false, "#post", popupWithImage.open.bind(popupWithImage));
+      const cardElement = card.generate();
+      cardList.addItem(cardElement);
+    },
+  }, 
+  ".posts__box"
+);
+
+
+api.getCards()
+  .then(res => {
+    res.forEach(item => {
+      const card = new Card(item._id, userInfo.id, item.name, item.link, item.likes, api.likeCard.bind(api), api.dislikeCard.bind(api), userInfo.id == item.owner._id, api.deleteCard.bind(api), "#post", popupWithImage.open.bind(popupWithImage));
+      const cardElement = card.generate();
+      cardList.addItem(cardElement);
+    });
+  });
 
 const popupWithPost = new PopupWithForm(
   "#post-popup", 
@@ -46,9 +104,13 @@ const popupWithPost = new PopupWithForm(
     });
   },
   data => {
-    const card = new Card(data.post_title, data.post_image, "#post", popupWithImage.open.bind(popupWithImage));
-    const cardElement = card.generate();
-    cardList.addItem(cardElement);
+    api.setCard(data.post_title, data.post_image)
+    .then(res => {
+      const card = new Card(res._id, userInfo.id, res.name, res.link, res.likes, api.likeCard.bind(api), api.dislikeCard.bind(api), userInfo.id == res.owner._id, api.deleteCard.bind(api), "#post", popupWithImage.open.bind(popupWithImage));
+      const cardElement = card.generate();
+      cardList.addItem(cardElement);
+    });
+
   }, 
   postFormValidator.toggleButtonState.bind(postFormValidator)
 );
@@ -60,13 +122,14 @@ const popupWithWho = new PopupWithForm(
   ".who__button-eddit",  
   inputs => {
     const data = userInfo.getUserInfo();
-    console.log(data);
     inputs[0].value = data.title;
     inputs[1].value = data.subtitle;
-    console.log(inputs);
   },
   data => {
-    userInfo.setUserInfo(data.who_title, data.who_subtitle);
+    api.setUserInfo(data.who_title, data.who_subtitle)
+      .then(res => {
+        userInfo.setUserInfo(res.name, res.about, res.avatar);
+      });
   }, 
   whoFormValidator.toggleButtonState.bind(whoFormValidator)
 );

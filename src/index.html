@@ -16,6 +16,7 @@
         <section class="who">
           <figure class="who__box">
             <img src="<%=require('./images/who/__figure/who__figure.jpg')%>" alt="Аватар" class="who__figure">
+            <button class="who__figure-eddit" type="button"></button>
             <figcaption class="who__caption">
               <div class="who__life-hacks">
                 <h1 class="who__title">Жак-Ив Кусто</h1>
@@ -55,6 +56,18 @@
       </div>
     </section>
 
+    <section class="popup" id="who-eddit-popup">
+      <div class="popup__box">
+        <button class="popup__button-close" type="button"></button>
+        <form class="popup__form" method="get" action="index.js" name="who_eddit_form">
+          <h2 class="popup__title">Обновить аватар</h2>
+          <input id="who-image" class="popup__input" type="url" name="who_image" required placeholder="Ссылка на картинку">
+          <span id="who-image-error" class="popup__input-error"></span>
+          <button class="popup__button-save" type="submit">Сохранить</button>
+        </form>
+      </div>
+    </section>
+
     <section class="popup" id="post-popup">
       <div class="popup__box">
         <button class="popup__button-close" type="button"></button>
@@ -81,6 +94,16 @@
       </div>
     </section>
 
+    <section class="popup" id="image-delete-popup">
+      <div class="popup__box">
+        <button class="popup__button-close" type="button"></button>
+        <form class="popup__form" method="get" action="index.js" name="post_delete_form">
+          <h2 class="popup__title">Вы уверены?</h2>
+          <button class="popup__button-save" type="submit">Да</button>
+        </form>
+      </div>
+    </section>
+
     <template id="post">
       <li class="post">
         <figure class="post__box">
@@ -90,7 +113,10 @@
           </div>
           <figcaption class="post__caption">
             <h2 class="post__title"></h2>
-            <button class="post__button-like" type="button"></button>
+            <div class="post__like-holder">
+              <button class="post__button-like" type="button"></button>
+              <p class="post__like-count">5</p>
+            </div>
           </figcaption>
         </figure>
       </li>

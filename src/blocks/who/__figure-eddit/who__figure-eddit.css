@@ -1,0 +1,56 @@
+.who__figure-eddit {
+  display: flex;
+  position: relative;
+  width: 26px;
+  height: 26px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  left: -77.5px;
+  top: -1px;
+  z-index: 20;
+}
+.who__figure-eddit:hover {
+  opacity: .6;
+  cursor: pointer;
+}
+.who__figure-eddit::before {
+  content: "";
+  display: block;
+  width: 127.5px;
+  height: 127.5px;
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  background-color: #000;
+  z-index: 8;
+  border: none;
+  border-radius: 50%;
+  background-image: url(../../../images/who/__figure-eddit/who__figure-eddit.svg);
+  align-self: center;
+  background-position: center;
+  background-size: 26px;
+  background-repeat: no-repeat;
+  opacity: 0;
+}
+.who__figure-eddit:hover::before {
+  opacity: 1;
+  transition: opacity;
+}
+@media screen and (max-width: 700px) {
+  .who__figure-eddit {
+    left: -90px;
+  }
+  .who__figure-eddit::before{
+    left: -45px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .who__figure-eddit {
+    left: 0px;
+    top: -70px;
+  }
+  .who__figure-eddit::before{
+    left: -50px;
+  }
+}

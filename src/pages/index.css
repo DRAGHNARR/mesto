@@ -15,6 +15,8 @@
 
 @import url(../blocks/who/who.css);
 @import url(../blocks/who/__box/who__box.css);
+@import url(../blocks/who/__figure-frame/who__figure-frame.css);
+@import url(../blocks/who/__figure-eddit/who__figure-eddit.css);
 @import url(../blocks/who/__figure/who__figure.css);
 @import url(../blocks/who/__caption/who__caption.css);
 @import url(../blocks/who/__life-hacks/who__life-hacks.css);
@@ -31,9 +33,11 @@
 @import url(../blocks/post/__frame/post__frame.css);
 @import url(../blocks/post/__figure/post__figure.css);
 @import url(../blocks/post/__button-remove/post__button-remove.css);
+@import url(../blocks/post/__button-remove/_disable/post__button-remove_disable.css);
 @import url(../blocks/post/__caption/post__caption.css);
 @import url(../blocks/post/__title/post__title.css);
 @import url(../blocks/post/__button-like/post__button-like.css);
+@import url(../blocks/post/__like-count/post__like-count.css);
 @import url(../blocks/post/__button-like/_active/post__button-like_active.css);
 
 @import url(../blocks/foot/foot.css);
