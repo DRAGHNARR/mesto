@@ -1,10 +1,8 @@
 export default class UserInfo {
-  constructor({titleSelector, subtitleSelector, figureSelector, overlaySelector}, clickHandler) {
+  constructor({titleSelector, subtitleSelector, figureSelector}) {
     this._titleElement = document.querySelector(titleSelector);
     this._subtitleElement = document.querySelector(subtitleSelector);
     this._figureElement = document.querySelector(figureSelector);
-    this._overlayElement = document.querySelector(overlaySelector);
-    this._clickHandler = clickHandler;
   }
 
   getUserInfo() {
@@ -15,21 +13,18 @@ export default class UserInfo {
     };
   }
 
-  setUserInfo(id, title, subtitle, figure) {
-    this.id = id;
-    this._titleElement.textContent = title;
-    this._subtitleElement.textContent = subtitle;
-    this._figureElement.src = figure;
-  }
-
-  setUserFigure(figure) {
-    this._figureElement.src = figure;
-  }
-
-  setEventListeners() {
-    this._overlayElement.addEventListener("click", event => {
-      event.preventDefault();
-      this._clickHandler();
-    });
+  setUserInfo({id, title, subtitle, figure}) {
+    if (id) {
+      this.id = id;
+    }
+    if (title) {
+      this._titleElement.textContent = title;
+    }
+    if (subtitle) {
+      this._subtitleElement.textContent = subtitle;
+    }
+    if (figure) {
+      this._figureElement.src = figure;
+    }
   }
 }

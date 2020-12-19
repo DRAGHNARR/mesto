@@ -2,19 +2,20 @@ export default class Card {
 
   //static _template = document.querySelector("#post").content;
 
-  constructor(id, userId, name, url, likes, liker, disliker, deletable, deleter, selector, clickHandler) {
-    this._id = id;
-    this._userId = userId;
-    this._name = name;
-    this._url = url;
-    this._likes = likes;
-    this._liker = liker;
-    this._disliker = disliker;
-    this._deletable = deletable;
-    this._deleter = deleter;
-    this._selector = selector;
-    this._clickHandler = clickHandler;
-    this._popup = document.querySelector("#image-popup"); 
+  constructor({cardSelector, cardID, userID, cardTitle, cardURL, cardAlt, cardLikes, cardIsDeletable, cardMethodLike, cardMethodDislike, cardMethodDelete, cardMethodOpen}) {
+
+    this._selector = cardSelector;
+    this.id = cardID;
+    this._userId = userID;
+    this._name = cardTitle;
+    this._url = cardURL;
+    this._alt = cardAlt;
+    this._likes = cardLikes;
+    this._liker = cardMethodLike;
+    this._disliker = cardMethodDislike;
+    this._deletable = cardIsDeletable;
+    this._deleter = cardMethodDelete;
+    this._clickHandler = cardMethodOpen; 
   }
 
   _getTemplate() {
@@ -25,7 +26,7 @@ export default class Card {
 
   _isLiked() {
     return this._likes.some(item => {
-      return item._id == this._userId});
+      return item.id == this._userId});
   }
 
   _like(button) {
@@ -36,20 +37,19 @@ export default class Card {
     button.classList.remove("post__button-like_active");
   }
 
-  _remove(card) {
-    card.remove();
+  remove() {
+    this._postElement.remove();
   }
 
   _setEventListeners() {
-    this._element.querySelector(".post__button-remove").addEventListener("click", event => {
-      this._clickHandler(this._url, this._name);
-      this._deleter(this._id);
-      this._remove(event.target.closest(".post"));
+    this._buttonRemove.addEventListener("click", event => {
+      this._deleter(this.id);
+      //this.remove(event.target.closest(".post"));
     });
   
     this._element.querySelector(".post__button-like").addEventListener("click", event => {
       if (!this._isLiked()) {
-        this._liker(this._id)
+        this._liker(this.id)
           .then(res => {
             this._likes = res.likes;
             this._like(event.target);
@@ -57,7 +57,7 @@ export default class Card {
           });
       }
       else {
-        this._disliker(this._id)
+        this._disliker(this.id)
           .then(res => {
             this._likes = res.likes;
             this._dislike(event.target);
@@ -73,6 +73,8 @@ export default class Card {
 
   generate() {
     this._element = this._getTemplate();
+    this._postElement = this._element.querySelector(".post");
+    this._buttonRemove = this._element.querySelector(".post__button-remove");
     this._likeCountElement = this._element.querySelector(".post__like-count");
     this._likeButtonElement = this._element.querySelector(".post__button-like");
 
@@ -83,7 +85,7 @@ export default class Card {
     elementImage.alt = this._name;
 
     if (!this._deletable) {
-      this._element.querySelector(".post__button-remove").classList.add("post__button-remove_disable");
+      this._buttonRemove.classList.add("post__button-remove_disable");
     }
     
     if (this._isLiked()) {

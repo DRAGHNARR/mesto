@@ -1,13 +1,14 @@
 import './index.css'; 
 
-import { initialCards, validationConfig } from '../components/consts.js';
-import Card from '../components/Card.js';
+import { imagePopupSelector, postSelectot, userConfgig, userPopupConfgig, postDeletePopupConfgig, postPopupConfgig, whoPopupConfgig, listnersConfig, validationConfig } from '../utils/consts.js';
 import FormValidator from '../components/FormValidator.js';
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithSubmit from "../components/PopupWithSubmit.js";
 import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
+import { createCard } from "../utils/utils.js";
 
 document.addEventListener("click", event => {
   if (event.target.classList.contains("popup")) {
@@ -27,29 +28,28 @@ const userFormValidator = new FormValidator(validationConfig, document.forms.who
 userFormValidator.enableValidation();
 
 const popupWithUser = new PopupWithForm(
-  "#who-eddit-popup", 
-  ".who__figure",  
+  userPopupConfgig, 
   inputs => {
     inputs[0].value = "";
   },
   data => {
     return api.setUserFigure(data.who_image)
       .then(res => {
-        console.log(res);
-        userInfo.setUserFigure(res.avatar);
-      });
+        userInfo.setUserInfo({figure: res.avatar});
+      })
+      .catch(err => console.log(err)); 
   }, 
   userFormValidator.toggleButtonState.bind(userFormValidator)
 );
 popupWithUser.setEventListeners();
 
-const userInfo = new UserInfo({titleSelector: ".who__title", subtitleSelector: ".who__subtitle", figureSelector: ".who__figure", overlaySelector: ".who__figure-eddit"}, popupWithUser.open.bind(popupWithUser));
-userInfo.setEventListeners();
+const userInfo = new UserInfo(userConfgig);
 
 api.getUserInfo()
   .then(res => {
-    userInfo.setUserInfo(res._id, res.name, res.about, res.avatar);
-  });
+    userInfo.setUserInfo({id: res._id, title: res.name, subtitle: res.about, figure: res.avatar});
+  })
+  .catch(err => console.log(err)); 
 
 //const userInfo = new UserInfo({titleSelector: ".who__title", subtitleSelector: ".who__subtitle"});
 
@@ -59,7 +59,7 @@ postFormValidator.enableValidation();
 const whoFormValidator = new FormValidator(validationConfig, document.forms.who_form);
 whoFormValidator.enableValidation();
 
-const popupWithImage = new PopupWithImage("#image-popup");
+const popupWithImage = new PopupWithImage(imagePopupSelector);
 popupWithImage.setEventListeners();
 
 /* const cardList = new Section({
@@ -75,13 +75,35 @@ popupWithImage.setEventListeners();
 cardList.renderItems(); */
 
 const cardList = new Section({
-  items: [], 
-  renderer: item => {
-      const card = new Card(item.name, item.link, false, "#post", popupWithImage.open.bind(popupWithImage));
+    items: [], 
+    renderer: item => {
+      const card = createCard({
+        cardSelector: postSelectot,
+        cardID: item._id, 
+        userID: userInfo.id, 
+        cardTitle: item.name, 
+        cardURL: item.link, 
+        cardAlt: "Изображение", 
+        cardLikes: item.likes, 
+        cardIsDeletable: userInfo.id === item.owner._id, 
+        cardMethodLike: api.likeCard.bind(api), 
+        cardMethodDislike: api.dislikeCard.bind(api), 
+        cardMethodDelete: (id) => {
+          submitPopup.setSubmitAction(() => {
+            api.deleteCard(card.id)
+              .then(res => {
+                card.remove()
+              })
+              .catch(err => console.log(err)); 
+          })
+          submitPopup.open();
+        },
+        cardMethodOpen: popupWithImage.open.bind(popupWithImage), 
+      });
       const cardElement = card.generate();
       cardList.addItem(cardElement);
     },
-  }, 
+  },  
   ".posts__box"
 );
 
@@ -89,15 +111,39 @@ const cardList = new Section({
 api.getCards()
   .then(res => {
     res.forEach(item => {
-      const card = new Card(item._id, userInfo.id, item.name, item.link, item.likes, api.likeCard.bind(api), api.dislikeCard.bind(api), userInfo.id == item.owner._id, api.deleteCard.bind(api), "#post", popupWithImage.open.bind(popupWithImage));
+      const card = createCard({
+        cardSelector: postSelectot,
+        cardID: item._id, 
+        userID: userInfo.id, 
+        cardTitle: item.name, 
+        cardURL: item.link, 
+        cardAlt: "Изображение", 
+        cardLikes: item.likes, 
+        cardIsDeletable: userInfo.id === item.owner._id, 
+        cardMethodLike: api.likeCard.bind(api), 
+        cardMethodDislike: api.dislikeCard.bind(api), 
+        cardMethodDelete: () => {
+          popupWithPostDelete.setSubmitAction(() => {
+            api.deleteCard(card.id)
+              .then(res => {
+                card.remove().bind(card);
+              })
+              .catch(err => console.log(err)); 
+          })
+          popupWithPostDelete.open();
+        },
+        cardMethodOpen: popupWithImage.open.bind(popupWithImage), 
+      });
       const cardElement = card.generate();
       cardList.addItem(cardElement);
     });
   });
 
+const popupWithPostDelete = new PopupWithSubmit("#image-delete-popup");
+popupWithPostDelete.setEventListeners();
+
 const popupWithPost = new PopupWithForm(
-  "#post-popup", 
-  ".who__button-add", 
+  postPopupConfgig, 
   inputs => {
     inputs.forEach(input => {
       input.value = "";
@@ -105,21 +151,45 @@ const popupWithPost = new PopupWithForm(
   },
   data => {
     return api.setCard(data.post_title, data.post_image)
-    .then(res => {
-      const card = new Card(res._id, userInfo.id, res.name, res.link, res.likes, api.likeCard.bind(api), api.dislikeCard.bind(api), userInfo.id == res.owner._id, api.deleteCard.bind(api), "#post", popupWithImage.open.bind(popupWithImage));
-      const cardElement = card.generate();
-      cardList.addItem(cardElement);
-    });
-
-  }, 
-  postFormValidator.toggleButtonState.bind(postFormValidator)
+      .then(res => {
+        const card = createCard({
+          cardSelector: postSelectot,
+          cardID: res._id, 
+          userID: userInfo.id, 
+          cardTitle: res.name, 
+          cardURL: res.link, 
+          cardAlt: "Изображение", 
+          cardLikes: res.likes, 
+          cardIsDeletable: userInfo.id === res.owner._id, 
+          cardMethodLike: api.likeCard.bind(api), 
+          cardMethodDislike: api.dislikeCard.bind(api), 
+          cardMethodDelete: event => {
+            popupWithPostDelete.setSubmitAction(() => {
+              api.deleteCard(card.id)
+                .then(res => {
+                  popupWithPostDelete.close();
+                  card.remove();
+                })
+                .catch(err => console.log(err)); 
+            })
+            popupWithPostDelete.open();
+          },
+          cardMethodOpen: popupWithImage.open.bind(popupWithImage), 
+        });
+        const cardElement = card.generate();
+        cardList.addItem(cardElement);
+      })
+      .then(res => {
+        popupWithPost.close();
+        popupWithPost.setButtonContent("Сохранить");
+      })
+      .catch(err => console.log(err)); 
+  }
 );
-
 popupWithPost.setEventListeners();
 
 const popupWithWho = new PopupWithForm(
-  "#who-popup", 
-  ".who__button-eddit",  
+  whoPopupConfgig,
   inputs => {
     const data = userInfo.getUserInfo();
     inputs[0].value = data.title;
@@ -128,15 +198,30 @@ const popupWithWho = new PopupWithForm(
   data => {
     return api.setUserInfo(data.who_title, data.who_subtitle)
       .then(res => {
-        userInfo.setUserInfo(res.name, res.about, res.avatar);
-      });
-  }, 
-  whoFormValidator.toggleButtonState.bind(whoFormValidator)
+        userInfo.setUserInfo({id: res._id, title: res.name, subtitle: res.about, figure: res.avatar});
+      })
+      .then(res => {
+        popupWithWho.close();
+        popupWithWho.setButtonContent("Сохранить");
+      })
+      .catch(err => console.log(err)); 
+  }
 );
 popupWithWho.setEventListeners();
 
-const openEditFormButton = document.querySelector('.who__button-eddit');
-openEditFormButton.addEventListener('click', () => popupWithWho.open());
+const openEditFormButton = document.querySelector(listnersConfig.openEditFormButton);
+openEditFormButton.addEventListener('click', () => {
+  whoFormValidator.resetErrors();
+  whoFormValidator.toggleButtonState();
+  popupWithWho.open()
+});
 
-const openAddFormButton = document.querySelector('.who__button-add');
-openAddFormButton.addEventListener('click', () => popupWithPost.open());
+const openAddFormButton = document.querySelector(listnersConfig.openAddFormButton);
+openAddFormButton.addEventListener('click', () => {
+  postFormValidator.resetErrors();
+  postFormValidator.toggleButtonState();
+  popupWithPost.open()
+});
+
+const openFigureEdditFormButton = document.querySelector(listnersConfig.openFigureEdditFormButton);
+openFigureEdditFormButton.addEventListener('click', () => popupWithUser.open());

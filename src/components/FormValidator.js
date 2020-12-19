@@ -1,6 +1,6 @@
 export default class FormValidator {
-  constructor(inConfig, inForm) {
-    this._config = inConfig;
+  constructor(validationConfig, inForm) {
+    this._config = validationConfig;
     this._form = inForm;
     this._inputList = Array.from(inForm.querySelectorAll(this._config.inputSelector));
     this._buttonSave = inForm.querySelector(this._config.submitButtonSelector)
@@ -24,6 +24,10 @@ export default class FormValidator {
     return(this._inputList.some(inputItem => {
       return(!inputItem.validity.valid);
     }));
+  }
+
+  resetErrors() {
+    this._inputList.forEach(input => this._hideInputError(input));
   }
   
   toggleButtonState() {
