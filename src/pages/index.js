@@ -1,6 +1,6 @@
 import './index.css'; 
 
-import { imagePopupSelector, postSelectot, userConfgig, userPopupConfgig, postDeletePopupConfgig, postPopupConfgig, whoPopupConfgig, listnersConfig, validationConfig } from '../utils/consts.js';
+import { cardsContainer, figureAlt, additionalPopupSelectors, saveStates, apiConfig, imagePopupSelector, postSelectot, userConfgig, userPopupConfgig, postDeletePopupConfgig, postPopupConfgig, whoPopupConfgig, listnersConfig, validationConfig } from '../utils/consts.js';
 import FormValidator from '../components/FormValidator.js';
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
@@ -9,20 +9,15 @@ import PopupWithSubmit from "../components/PopupWithSubmit.js";
 import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
 import { createCard } from "../utils/utils.js";
+import { renderLoading } from "../utils/utils.js";
 
 document.addEventListener("click", event => {
-  if (event.target.classList.contains("popup")) {
-    event.target.classList.remove("popup_active");
+  if (event.target.classList.contains(additionalPopupSelectors.popup)) {
+    event.target.classList.remove(additionalPopupSelectors.activePopup);
   }
 });
 
-const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-18',
-  headers: {
-    authorization: '0b2a6fdf-1704-45fb-a35d-1d4f050e76e7',
-    'Content-Type': 'application/json'
-  }
-}); 
+const api = new Api(apiConfig); 
 
 const userFormValidator = new FormValidator(validationConfig, document.forms.who_eddit_form);
 userFormValidator.enableValidation();
@@ -36,10 +31,11 @@ const popupWithUser = new PopupWithForm(
     return api.setUserFigure(data.who_image)
       .then(res => {
         userInfo.setUserInfo({figure: res.avatar});
+        popupWithUser.close();
       })
       .catch(err => console.log(err)); 
   }, 
-  userFormValidator.toggleButtonState.bind(userFormValidator)
+  renderLoading
 );
 popupWithUser.setEventListeners();
 
@@ -83,7 +79,7 @@ const cardList = new Section({
         userID: userInfo.id, 
         cardTitle: item.name, 
         cardURL: item.link, 
-        cardAlt: "Изображение", 
+        cardAlt: figureAlt, 
         cardLikes: item.likes, 
         cardIsDeletable: userInfo.id === item.owner._id, 
         cardMethodLike: api.likeCard.bind(api), 
@@ -104,7 +100,7 @@ const cardList = new Section({
       cardList.addItem(cardElement);
     },
   },  
-  ".posts__box"
+  cardsContainer
 );
 
 
@@ -117,7 +113,7 @@ api.getCards()
         userID: userInfo.id, 
         cardTitle: item.name, 
         cardURL: item.link, 
-        cardAlt: "Изображение", 
+        cardAlt: figureAlt, 
         cardLikes: item.likes, 
         cardIsDeletable: userInfo.id === item.owner._id, 
         cardMethodLike: api.likeCard.bind(api), 
@@ -139,7 +135,7 @@ api.getCards()
     });
   });
 
-const popupWithPostDelete = new PopupWithSubmit("#image-delete-popup");
+const popupWithPostDelete = new PopupWithSubmit(additionalPopupSelectors.deletePopup);
 popupWithPostDelete.setEventListeners();
 
 const popupWithPost = new PopupWithForm(
@@ -158,7 +154,7 @@ const popupWithPost = new PopupWithForm(
           userID: userInfo.id, 
           cardTitle: res.name, 
           cardURL: res.link, 
-          cardAlt: "Изображение", 
+          cardAlt: figureAlt, 
           cardLikes: res.likes, 
           cardIsDeletable: userInfo.id === res.owner._id, 
           cardMethodLike: api.likeCard.bind(api), 
@@ -181,10 +177,11 @@ const popupWithPost = new PopupWithForm(
       })
       .then(res => {
         popupWithPost.close();
-        popupWithPost.setButtonContent("Сохранить");
+        renderLoading(popupWithPost.getButtonSave(), saveStates.saved);
       })
       .catch(err => console.log(err)); 
-  }
+  },
+  renderLoading
 );
 popupWithPost.setEventListeners();
 
@@ -202,10 +199,11 @@ const popupWithWho = new PopupWithForm(
       })
       .then(res => {
         popupWithWho.close();
-        popupWithWho.setButtonContent("Сохранить");
+        renderLoading(popupWithWho.getButtonSave(), saveStates.saved);
       })
       .catch(err => console.log(err)); 
-  }
+  },
+  renderLoading
 );
 popupWithWho.setEventListeners();
 
