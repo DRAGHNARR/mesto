@@ -51,14 +51,17 @@ export default class Api {
     });
   }
 
-  getCards() {
-    return fetch(this.cardUrl, {headers: this.header})
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
+  getCards(promises) {
+    return Promise.all(promises)
+      .then(res => {
+        return fetch(this.cardUrl, {headers: this.header})
+        .then(res => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Ошибка: ${res.status}`);
+        });
+      });
   }
 
   setCard(name, link) {

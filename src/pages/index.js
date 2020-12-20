@@ -41,7 +41,7 @@ popupWithUser.setEventListeners();
 
 const userInfo = new UserInfo(userConfgig);
 
-api.getUserInfo()
+const userPromise = api.getUserInfo()
   .then(res => {
     userInfo.setUserInfo({id: res._id, title: res.name, subtitle: res.about, figure: res.avatar});
   })
@@ -103,8 +103,7 @@ const cardList = new Section({
   cardsContainer
 );
 
-
-api.getCards()
+api.getCards([userPromise])
   .then(res => {
     res.forEach(item => {
       const card = createCard({
