@@ -26,7 +26,7 @@ export default class Card {
 
   _isLiked() {
     return this._likes.some(item => {
-      return item.id == this._userId});
+      return item._id === this._userId});
   }
 
   _like(button) {
@@ -59,6 +59,7 @@ export default class Card {
       else {
         this._disliker(this.id)
           .then(res => {
+            console.log(123);
             this._likes = res.likes;
             this._dislike(event.target);
             this._likeCountElement.textContent = this._likes.length;
