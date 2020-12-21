@@ -28,14 +28,17 @@ const popupWithUser = new PopupWithForm(
     inputs[0].value = "";
   },
   data => {
+    renderLoading(popupWithUser.getButtonSave(), saveStates.saving);
     return api.setUserFigure(data.who_image)
       .then(res => {
         userInfo.setUserInfo({figure: res.avatar});
-        popupWithUser.close();
       })
-      .catch(err => console.log(err)); 
-  }, 
-  renderLoading
+      .catch(err => console.log(err))
+      .finally(() => {
+        popupWithUser.close();
+        renderLoading(popupWithUser.getButtonSave(), saveStates.saved);
+      }); 
+  }
 );
 popupWithUser.setEventListeners();
 
@@ -145,6 +148,7 @@ const popupWithPost = new PopupWithForm(
     });
   },
   data => {
+    renderLoading(popupWithPost.getButtonSave(), saveStates.saving);
     return api.setCard(data.post_title, data.post_image)
       .then(res => {
         const card = createCard({
@@ -174,13 +178,12 @@ const popupWithPost = new PopupWithForm(
         const cardElement = card.generate();
         cardList.addItem(cardElement);
       })
-      .then(res => {
+      .catch(err => console.log(err))
+      .finally(() => {
         popupWithPost.close();
         renderLoading(popupWithPost.getButtonSave(), saveStates.saved);
-      })
-      .catch(err => console.log(err)); 
-  },
-  renderLoading
+      }); 
+  }
 );
 popupWithPost.setEventListeners();
 
@@ -192,17 +195,17 @@ const popupWithWho = new PopupWithForm(
     inputs[1].value = data.subtitle;
   },
   data => {
+    renderLoading(popupWithWho.getButtonSave(), saveStates.saving);
     return api.setUserInfo(data.who_title, data.who_subtitle)
       .then(res => {
         userInfo.setUserInfo({id: res._id, title: res.name, subtitle: res.about, figure: res.avatar});
       })
-      .then(res => {
+      .catch(err => console.log(err))
+      .finally(() => {
         popupWithWho.close();
         renderLoading(popupWithWho.getButtonSave(), saveStates.saved);
-      })
-      .catch(err => console.log(err)); 
-  },
-  renderLoading
+      }); 
+  }
 );
 popupWithWho.setEventListeners();
 
