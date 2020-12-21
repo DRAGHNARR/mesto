@@ -21,13 +21,11 @@ export const userConfgig = {
 export const userPopupConfgig = {
   selector: "#who-eddit-popup", 
   openSelector: ".who__figure",  
-  savingState: saveStates.saving,
 }
 
 export const postPopupConfgig = {
   selector: "#post-popup", 
   openSelector: ".who__button-add",  
-  savingState: saveStates.saving,
 }
 
 export const postDeletePopupConfgig = {
@@ -38,7 +36,6 @@ export const postDeletePopupConfgig = {
 export const whoPopupConfgig = {
   selector: "#who-popup", 
   openSelector: ".who__button-eddit",  
-  savingState: saveStates.saving,
 }
 
 export const listnersConfig = {

@@ -1,7 +1,7 @@
 import Popup from "./Popup.js";
 
 export default class PopupWithForm extends Popup {
-  constructor({selector, openSelector, savingState}, opener, submitter) {
+  constructor({selector, openSelector}, opener, submitter) {
     super(selector);
 
     this._openElement = document.querySelector(openSelector);
