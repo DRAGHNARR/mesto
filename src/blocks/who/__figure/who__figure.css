@@ -5,14 +5,12 @@
 }
 
 .who__figure:after {
-  width: 127.5px;
   border-radius: 50%;
   content: '\A';
   position: absolute;
-  width: 100%; 
+  width: 100%;
   height:100%;
-  border-radius: 50%;
-  top:0; 
+  top:0;
   left:0;
   background:rgba(0,0,0,0.6);
   opacity: 0;
