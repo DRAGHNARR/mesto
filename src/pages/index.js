@@ -44,14 +44,6 @@ popupWithUser.setEventListeners();
 
 const userInfo = new UserInfo(userConfgig);
 
-const userPromise = api.getUserInfo()
-  .then(res => {
-    userInfo.setUserInfo({id: res._id, title: res.name, subtitle: res.about, figure: res.avatar});
-  })
-  .catch(err => console.log(err)); 
-
-//const userInfo = new UserInfo({titleSelector: ".who__title", subtitleSelector: ".who__subtitle"});
-
 const postFormValidator = new FormValidator(validationConfig, document.forms.post_form);
 postFormValidator.enableValidation();
 
@@ -60,6 +52,29 @@ whoFormValidator.enableValidation();
 
 const popupWithImage = new PopupWithImage(imagePopupSelector);
 popupWithImage.setEventListeners();
+
+const cardProperties = {
+  cardSelector: postSelectot,
+  //cardID: item._id, 
+  //userID: userInfo.id, 
+  //cardTitle: item.name,  
+  //cardURL: item.link, 
+  cardAlt: figureAlt, 
+  //cardLikes: item.likes, 
+  //cardIsDeletable: userInfo.id === item.owner._id, 
+  cardMethodLike: api.likeCard.bind(api), 
+  cardMethodDislike: api.dislikeCard.bind(api), 
+  cardMethodOpen: popupWithImage.open.bind(popupWithImage), 
+};
+
+const userPromise = api.getUserInfo()
+  .then(res => {
+    userInfo.setUserInfo({id: res._id, title: res.name, subtitle: res.about, figure: res.avatar});
+    cardProperties.userID = res._id;
+  })
+  .catch(err => console.log(err)); 
+
+//const userInfo = new UserInfo({titleSelector: ".who__title", subtitleSelector: ".who__subtitle"});
 
 /* const cardList = new Section({
     items: initialCards, 
@@ -76,29 +91,26 @@ cardList.renderItems(); */
 const cardList = new Section({
     items: [], 
     renderer: item => {
-      const card = createCard({
-        cardSelector: postSelectot,
-        cardID: item._id, 
-        userID: userInfo.id, 
-        cardTitle: item.name, 
-        cardURL: item.link, 
-        cardAlt: figureAlt, 
-        cardLikes: item.likes, 
-        cardIsDeletable: userInfo.id === item.owner._id, 
-        cardMethodLike: api.likeCard.bind(api), 
-        cardMethodDislike: api.dislikeCard.bind(api), 
-        cardMethodDelete: (id) => {
-          submitPopup.setSubmitAction(() => {
-            api.deleteCard(card.id)
-              .then(res => {
-                card.remove()
-              })
-              .catch(err => console.log(err)); 
-          })
-          submitPopup.open();
-        },
-        cardMethodOpen: popupWithImage.open.bind(popupWithImage), 
-      });
+      cardProperties.cardID = item._id;
+      cardProperties.cardTitle = item.name;
+      cardProperties.cardURL = item.link;
+      cardProperties.cardLikes = item.likes;
+      cardProperties.cardIsDeletable = userInfo.id === item.owner._id;
+      cardProperties.cardMethodDelete = () => {
+        popupWithPostDelete.setSubmitAction(() => {
+          api.deleteCard(card.id)
+            .then(res => {
+              card.remove();
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+              popupWithPostDelete.close();
+            }); 
+        });
+        popupWithPostDelete.open();
+      };
+      const card = createCard(cardProperties);
+
       const cardElement = card.generate();
       cardList.addItem(cardElement);
     },
@@ -106,32 +118,30 @@ const cardList = new Section({
   cardsContainer
 );
 
+console.log(userPromise);
 api.getCards([userPromise])
   .then(res => {
     res.forEach(item => {
-      const card = createCard({
-        cardSelector: postSelectot,
-        cardID: item._id, 
-        userID: userInfo.id, 
-        cardTitle: item.name, 
-        cardURL: item.link, 
-        cardAlt: figureAlt, 
-        cardLikes: item.likes, 
-        cardIsDeletable: userInfo.id === item.owner._id, 
-        cardMethodLike: api.likeCard.bind(api), 
-        cardMethodDislike: api.dislikeCard.bind(api), 
-        cardMethodDelete: () => {
-          popupWithPostDelete.setSubmitAction(() => {
-            api.deleteCard(card.id)
-              .then(res => {
-                card.remove().bind(card);
-              })
-              .catch(err => console.log(err)); 
-          })
-          popupWithPostDelete.open();
-        },
-        cardMethodOpen: popupWithImage.open.bind(popupWithImage), 
-      });
+      cardProperties.cardID = item._id;
+      cardProperties.cardTitle = item.name;
+      cardProperties.cardURL = item.link;
+      cardProperties.cardLikes = item.likes;
+      cardProperties.cardIsDeletable = userInfo.id === item.owner._id;
+      cardProperties.cardMethodDelete = () => {
+        popupWithPostDelete.setSubmitAction(() => {
+          api.deleteCard(card.id)
+            .then(res => {
+              card.remove();
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+              popupWithPostDelete.close();
+            }); 
+        });
+        popupWithPostDelete.open();
+      };
+      const card = createCard(cardProperties);
+
       const cardElement = card.generate();
       cardList.addItem(cardElement);
     });
@@ -150,31 +160,27 @@ const popupWithPost = new PopupWithForm(
   data => {
     renderLoading(popupWithPost.getButtonSave(), saveStates.saving);
     return api.setCard(data.post_title, data.post_image)
-      .then(res => {
-        const card = createCard({
-          cardSelector: postSelectot,
-          cardID: res._id, 
-          userID: userInfo.id, 
-          cardTitle: res.name, 
-          cardURL: res.link, 
-          cardAlt: figureAlt, 
-          cardLikes: res.likes, 
-          cardIsDeletable: userInfo.id === res.owner._id, 
-          cardMethodLike: api.likeCard.bind(api), 
-          cardMethodDislike: api.dislikeCard.bind(api), 
-          cardMethodDelete: event => {
-            popupWithPostDelete.setSubmitAction(() => {
-              api.deleteCard(card.id)
-                .then(res => {
-                  popupWithPostDelete.close();
-                  card.remove();
-                })
-                .catch(err => console.log(err)); 
-            })
-            popupWithPostDelete.open();
-          },
-          cardMethodOpen: popupWithImage.open.bind(popupWithImage), 
-        });
+      .then(item => {
+        cardProperties.cardID = item._id;
+        cardProperties.cardTitle = item.name;
+        cardProperties.cardURL = item.link;
+        cardProperties.cardLikes = item.likes;
+        cardProperties.cardIsDeletable = userInfo.id === item.owner._id;
+        cardProperties.cardMethodDelete = () => {
+          popupWithPostDelete.setSubmitAction(() => {
+            api.deleteCard(card.id)
+              .then(res => {
+                card.remove();
+              })
+              .catch(err => console.log(err))
+              .finally(() => {
+                popupWithPostDelete.close();
+              }); 
+          });
+          popupWithPostDelete.open();
+        };
+        const card = createCard(cardProperties);
+
         const cardElement = card.generate();
         cardList.addItem(cardElement);
       })
